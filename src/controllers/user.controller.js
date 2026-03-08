@@ -11,24 +11,23 @@ const registerUser =asyncHandler( async (req,res)=>{
     // remove password and refresh token field from response
     // check for user creation
     // return res
-    const {fullName,email,password,phoneNumber ,gradutationYear,department,enrollmentNumber,  currentCompany,jobTitle, location, linkedinUrl, role}=req.body
-    console.log('fullName',fullName)
-
+    const {fullName,email,password,phoneNumber ,graduationYear,department,enrollmentNumber,  currentCompany,jobTitle, location, linkedinUrl, role}=req.body
+    
     if(
         [
-            fullName,email,password,gradutationYear,department,enrollmentNumber,linkedinUrl,
+            fullName,email,password,graduationYear,department,enrollmentNumber,linkedinUrl,
         ].some((field)=>field?.trim()==="")
     ){
         throw new apiError(400,"the field is mandatory")
 
     }
-    const existeduser=User.findOne({
+    const existeduser=await User.findOne({
         $or:[
-            {fullName},{email},{enrollmentNumber}
+            {email},{enrollmentNumber}
         ]
     })
     if(existeduser){
-        throw new apiError(409,"name or enrollmentnumber or email already exixts")
+        throw new apiError(409," enrollmentnumber or email already exixts")
     }
    const profileImagePath= req.files?.profileImage[0]?.path
    if(!profileImagePath){
@@ -41,7 +40,7 @@ const registerUser =asyncHandler( async (req,res)=>{
     email,
     password,
     phoneNumber ,
-    gradutationYear,
+    graduationYear,
     department,
     enrollmentNumber,
     currentCompany,
@@ -56,7 +55,7 @@ const registerUser =asyncHandler( async (req,res)=>{
 
    })
 
-   const createdUser=User.findById(user._id).select(
+   const createdUser=await User.findById(user._id).select(
     "-password -refreshToken"
    )
    if(!createdUser){
