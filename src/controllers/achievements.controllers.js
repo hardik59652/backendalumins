@@ -14,12 +14,12 @@ export const createAchievement = asyncHandler(async (req,res) => {
             title,
             category,
             description,
-            photo:req.file?.photo[0].path
+            photo:req.file?req.file.path:null
         }
 
     )
     return res
-    .status(200)
+    .status(201)
     .json(
         new apiResponse(201,achievement,"achievement submitted for approval")
     )
