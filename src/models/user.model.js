@@ -5,7 +5,9 @@ const userSchema=new Schema(
     {   profileImage:
         {
             type:String,
-            required:true
+            required:function(){
+                return this.role === "alumni"
+               }
         },
         fullName:{
             type:String,
@@ -32,19 +34,25 @@ const userSchema=new Schema(
             type:String,
             trim:true,
             index:true,
-            required:true
+            required:function(){
+                return this.role === "alumni"
+               }
         },
         department:{
             type:String,
             trim:true,
             index:true,
-            required:true
+            required:function(){
+                return this.role === "alumni"
+               }
         },
         enrollmentNumber:{
             type:String,
             unique:true,
             trim:true,
-            required:true,
+            required:function(){
+                return this.role === "alumni"
+               },
         },
         currentCompany:{
         type:String,
@@ -58,7 +66,9 @@ const userSchema=new Schema(
         linkedinUrl:{
             type:String,
             unique:true,
-            required:true
+            required:function(){
+                return this.role === "alumni"
+               }
         },
         role:{
             type:String,

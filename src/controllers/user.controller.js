@@ -79,7 +79,7 @@ const registerUser =asyncHandler( async (req,res)=>{
     "-password -refreshToken"
    )
    if(!createdUser){
-    throw new apiError(500, "somthing went ")
+    throw new apiError(500, "somthing went wrong")
    }
    return res.status(201).json(
     new apiResponse(200, createdUser,"user registered successfully")
@@ -90,8 +90,8 @@ const registerUser =asyncHandler( async (req,res)=>{
 const loginUser=asyncHandler(async (req,res)=>{
     // console.log("ACCESS SECRET:", process.env.ACCESS_TOKEN_SECRET)
     // console.log("REFRESH SECRET:", process.env.REFRESH_TOKEN_SECRET)
-    console.log(req.body)
-    const {email,password}=req.body
+    // console.log("BODY:", req.body)
+    const {email,password}=req.body||{}
     if(!email||!password){
         throw new apiError(400,"email  and passsword is needed for login")
     }
@@ -100,6 +100,7 @@ const loginUser=asyncHandler(async (req,res)=>{
         throw new apiError(404,"user is not existing")
     }
     const isPasswordValid=await existedUser.isPasswordCorrect(password)
+    // console.log("Password valid:", isPasswordValid)
     if(!isPasswordValid){
         throw new apiError(401, "password is incorrect")
     }
@@ -107,8 +108,8 @@ const loginUser=asyncHandler(async (req,res)=>{
    const loggedInUser=await User.findById(existedUser._id).select("-password -refreshToken")
    const options = {
     httpOnly: true,
-    secure: true,   // important for http
-    sameSite: "none"
+    secure: true,  // important for http
+    sameSite: "lax"
   }
    return res
    .status(200)
@@ -138,7 +139,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true,   // important for http
-        sameSite: "none"
+        sameSite: "lax"
       }
     
   
@@ -149,8 +150,16 @@ const logoutUser = asyncHandler(async (req, res) => {
       .json(new apiResponse(200, {}, "User logged out successfully"));
   
   });
+const getCurrentUser = asyncHandler(async (req, res) => {
+
+    return res.status(200).json(
+      new apiResponse(200, req.user, "Current user fetched successfully")
+    );
+  
+  });
 export {
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    getCurrentUser,
 } 

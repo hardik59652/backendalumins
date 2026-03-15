@@ -27,4 +27,8 @@ import userRouter from "./routes/user.routes.js"
  // routes declaration
 
  app.use("/api/v1/users",userRouter)
+
+
+ import achievementRouter from "./routes/achievement.routes.js"
+ app.use("/api/v1/achievements",achievementRouter)
 export default app
