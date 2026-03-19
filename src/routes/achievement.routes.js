@@ -13,7 +13,7 @@ import {
 const router=express.Router()
 router.route("/create").post(
     verifyJWT,
-    upload.single("photo"),
+    uploadAchievement.single("photo"),
     createAchievement
 )
 router.route("/my-achievements").get(

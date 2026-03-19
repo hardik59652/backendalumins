@@ -5,16 +5,20 @@ import dotenv from "dotenv"
 import connectDB from "./db/index.js";
 import app from "./app.js"
 import { createAdminIfNotExists } from "./utils/adminSeeder.js";
+import "./cron/jobExpiry.cron.js"
 dotenv.config({
     path:"./.env"
 })
 connectDB()
-.then(
-    await createAdminIfNotExists(),
+.then(async () => {
+
+    await createAdminIfNotExists()
+
+    
     app.listen(process.env.PORT||8000,"0.0.0.0",()=>{
         console.log(`server is runing at port:${process.env.PORT||8000}`)
     })
-)
+})
 .catch((error)=>{
     console.log(`mongodb connection failed${error}`)
 })

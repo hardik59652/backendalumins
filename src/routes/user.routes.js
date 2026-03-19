@@ -4,7 +4,7 @@ import {upload} from "../middleware/upload.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 const router=Router()
 router.route("/register").post(
-    upload.fields([
+    uploadProfile.fields([
         {
             name:"profileImage",
             maxCount:1
@@ -22,6 +22,9 @@ router.route("/logout").post(
    verifyJWT,
     logoutUser
 )
-router.get("/currentuser", verifyJWT, getCurrentUser);
+router.route("/currentuser").get(
+     verifyJWT, 
+     getCurrentUser
+)
 
 export default router

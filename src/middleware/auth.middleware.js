@@ -3,7 +3,8 @@ import { asyncHandler } from "../utils/asynchandler.js";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 export const verifyJWT = asyncHandler(async (req, _, next) => {
-
+  console.log("cookies:", req.cookies);
+ ;
   // console.log("COOKIES:", req.cookies)
 
   const token = req.cookies.accessToken;
@@ -27,5 +28,6 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
   }
 
   req.user = user;
+  console.log("user:", req.user)
   next();
 });

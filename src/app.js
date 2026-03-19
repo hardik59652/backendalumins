@@ -32,4 +32,8 @@ import userRouter from "./routes/user.routes.js"
 
  import achievementRouter from "./routes/achievement.routes.js"
  app.use("/api/v1/achievements",achievementRouter)
+ import jobOpportunityRouter from "./routes/jobOpportunity.routes.js"
+ app.use("/api/v1/jobopportunity",jobOpportunityRouter)
+ import jobApplicatonRouter from "./routes/jobApplication.routes.js"
+ app.use("/api/v1/jobapplication",jobApplicatonRouter)
 export default app

@@ -108,7 +108,7 @@ const loginUser=asyncHandler(async (req,res)=>{
    const loggedInUser=await User.findById(existedUser._id).select("-password -refreshToken")
    const options = {
     httpOnly: true,
-    secure: true,  // important for http
+    secure: false,  // important for http
     sameSite: "lax"
   }
    return res
@@ -157,7 +157,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
       throw new apiError(404, "User not found");
   }
     return res.status(200).json(
-      new apiResponse(200, req.user, "Current user fetched successfully")
+      new apiResponse(200, user, "Current user fetched successfully")
     );
   
   });
