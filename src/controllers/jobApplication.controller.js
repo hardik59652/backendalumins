@@ -6,10 +6,11 @@ import { asyncHandler } from "../utils/asynchandler.js"
 
 const createApplication=asyncHandler(async (req,res) => {
     const {
-        resumeUrl,
+       
         coverLetter,
 
     }=req.body
+    const resumeUrl = req.file?.path 
     const {jobId}=req.params
     if(!resumeUrl||!coverLetter){
         throw new apiError(400,"you missed mandatory fields")
@@ -39,7 +40,7 @@ const getJobApplicationForJob=asyncHandler(async (req,res) => {
     if(!jobId){
         throw new apiError(400,"job is required")
     }
-    const applications=await JobApplication.find({jobId}).populate("userId","fullname email")
+    const applications=await JobApplication.find({jobId}).populate("userId","fullName email profileImage")
     
     if(!applications||applications.length===0){
     throw new apiError(404,"no applicatons for required job")
@@ -54,13 +55,14 @@ const getJobApplicationForJob=asyncHandler(async (req,res) => {
 const updateApplicationStatus=asyncHandler(async (req,res) => {
     const {id}=req.params
     const {status}=req.body
+    console.log(status)
     if(!id){
         throw new apiError(400,"application id is required")
     }
     if(!status){
         throw new apiError(400,"status is required")
     }
-    const validityStatus=["pending","reviewed","accepted","rejected"]
+    const validityStatus=["pending","reviewed","approved","rejected"]
     if(!validityStatus.includes(status)){
         throw new apiError(400,"status is invalid")
     }    
@@ -79,8 +81,10 @@ const updateApplicationStatus=asyncHandler(async (req,res) => {
 const getMyJobApplication=asyncHandler(async (req,res) => {
     const applications = await JobApplication.find({
         userId: req.user._id
-    }).populate("jobId", "title company location")
-
+    })
+    .populate("jobId", "title company location")
+    .populate("userId","fullName email profileImage ")
+console.log(applications)
     if(!applications || applications.length === 0){
         throw new apiError(404, "No applications found")
     }

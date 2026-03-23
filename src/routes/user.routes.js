@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { logoutUser, loginUser, registerUser ,getCurrentUser} from "../controllers/user.controller.js";
-import {upload} from "../middleware/upload.middleware.js";
+import {uploadProfile} from "../middleware/upload.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 const router=Router()
 router.route("/register").post(

@@ -7,7 +7,7 @@ import {
     getJobApplicationForJob,
     updateApplicationStatus,
     getMyJobApplication,
- } from "../controllers/jobApplication.controller"
+ } from "../controllers/jobApplication.controller.js"
  const router =express.Router()
  router.route(
     "/apply/:jobId").post(
@@ -23,7 +23,7 @@ import {
     verifyJWT,
     updateApplicationStatus
   )
-  router.route("/myApplilcations").get(
+  router.route("/myApplications").get(
     verifyJWT,
     getMyJobApplication
   )
