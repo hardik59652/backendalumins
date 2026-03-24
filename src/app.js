@@ -36,4 +36,6 @@ import userRouter from "./routes/user.routes.js"
  app.use("/api/v1/jobopportunity",jobOpportunityRouter)
  import jobApplicatonRouter from "./routes/jobApplication.routes.js"
  app.use("/api/v1/jobapplication",jobApplicatonRouter)
+ import newsRouter from "./routes/news.routes.js"
+ app.use("/api/v1/news",newsRouter)
 export default app

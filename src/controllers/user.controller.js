@@ -118,7 +118,8 @@ const loginUser=asyncHandler(async (req,res)=>{
    .json(
     new apiResponse(200,
         {
-            user:loggedInUser,accessToken,refreshToken
+            user:loggedInUser
+            // ,accessToken,refreshToken
         },
         "user logged in successfully"
     )
@@ -138,7 +139,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     );
     const options = {
         httpOnly: true,
-        secure: true,   // important for http
+        secure: false,   // important for http
         sameSite: "lax"
       }
     
