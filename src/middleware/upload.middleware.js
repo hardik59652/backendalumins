@@ -117,3 +117,31 @@ export const uploadEvent = multer({
   storage: eventStorage,
   fileFilter: eventImageFilter
 });
+/* =========================
+   REUNION BANNER IMAGE STORAGE
+========================= */
+
+const reunionStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/reunion");
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = Date.now() + "-" + file.originalname;
+    cb(null, uniqueName);
+  }
+});
+
+const reunionImageFilter = (req, file, cb) => {
+  const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files are allowed"), false);
+  }
+};
+
+export const uploadReunion = multer({
+  storage: reunionStorage,
+  fileFilter: reunionImageFilter
+});

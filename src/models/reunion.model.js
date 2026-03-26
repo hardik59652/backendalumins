@@ -20,7 +20,7 @@ const reunionSchema = new mongoose.Schema(
   highlights:[
     {
       title:String,
-      icon:String
+     
     }
   ],
   bannerImage:{

@@ -46,4 +46,6 @@ import userRouter from "./routes/user.routes.js"
  app.use("/api/v1/donation",donationrouter)
  import reunionRouter from "./routes/reunion.routes.js"
  app.use("/api/v1/reunion",reunionRouter)
+ import givebackrouter from "./routes/giveback.routes.js"
+ app.use("/api/v1/giveback",givebackrouter)
 export default app
