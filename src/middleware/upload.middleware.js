@@ -89,3 +89,31 @@ export const uploadNews = multer({
   storage: newsStorage,
   fileFilter: newsImageFilter
 });
+/* =========================
+   EVENT IMAGE STORAGE
+========================= */
+
+const eventStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/events");
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = Date.now() + "-" + file.originalname;
+    cb(null, uniqueName);
+  }
+});
+
+const eventImageFilter = (req, file, cb) => {
+  const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files are allowed"), false);
+  }
+};
+
+export const uploadEvent = multer({
+  storage: eventStorage,
+  fileFilter: eventImageFilter
+});

@@ -38,4 +38,12 @@ import userRouter from "./routes/user.routes.js"
  app.use("/api/v1/jobapplication",jobApplicatonRouter)
  import newsRouter from "./routes/news.routes.js"
  app.use("/api/v1/news",newsRouter)
+ import eventsRouter from "./routes/events.routes.js"
+ app.use("/api/v1/events",eventsRouter)
+ import campaignRouter from "./routes/campaign.routes.js"
+ app.use("/api/v1/campaign",campaignRouter)
+ import donationrouter from "./routes/donations.routes.js"
+ app.use("/api/v1/donation",donationrouter)
+ import reunionRouter from "./routes/reunion.routes.js"
+ app.use("/api/v1/reunion",reunionRouter)
 export default app
