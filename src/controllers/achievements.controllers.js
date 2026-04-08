@@ -1,3 +1,4 @@
+import fs from "fs";
 import { asyncHandler } from "../utils/asynchandler.js";
 import {apiError} from "../utils/apiError.js"
 import {apiResponse} from "../utils/apiResponse.js"
@@ -100,3 +101,89 @@ export const getPendingAchievements = asyncHandler(async (req, res) => {
     )
 
 })                                 
+export const getSingleAchievement = asyncHandler(async (req, res) => {
+
+    const { id } = req.params;
+
+    const achievement = await Achievement.findById(id)
+        .populate("userId", "name email");
+
+    if (!achievement) {
+        throw new apiError(404, "Achievement not found");
+    }
+
+    return res.status(200).json(
+        new apiResponse(200, achievement, "Achievement fetched successfully")
+    );
+});
+export const updateAchievement = asyncHandler(async (req, res) => {
+
+    const { id } = req.params;
+
+    const achievement = await Achievement.findById(id);
+
+    if (!achievement) {
+        throw new apiError(404, "Achievement not found");
+    }
+
+    // check ownership
+    if (achievement.userId.toString() !== req.user._id.toString()) {
+        throw new apiError(403, "Unauthorized to update this achievement");
+    }
+
+    const { title, category, description } = req.body;
+
+    // update fields only if provided
+    if (title) achievement.title = title;
+    if (category) achievement.category = category;
+    if (description) achievement.description = description;
+
+    // update photo if new photo uploaded
+    if (req.file) {
+        achievement.photo = req.file.path;
+    }
+
+    // after editing -> again pending
+    achievement.status = "pending";
+    achievement.approvedAt = null;
+
+    await achievement.save();
+
+    return res.status(200).json(
+        new apiResponse(200, achievement, "Achievement updated and sent for approval")
+    );
+});
+
+
+
+export const deleteAchievement = asyncHandler(async (req, res) => {
+
+    const { id } = req.params;
+
+    const achievement = await Achievement.findById(id);
+
+    if (!achievement) {
+        throw new apiError(404, "Achievement not found");
+    }
+
+    // check ownership (only owner can delete)
+    if (achievement.userId.toString() !== req.user._id.toString()) {
+        throw new apiError(403, "Unauthorized to delete this achievement");
+    }
+
+    // delete image from uploads folder
+    if (achievement.photo) {
+        fs.unlink(achievement.photo, (err) => {
+            if (err) {
+                console.log("Error deleting photo:", err.message);
+            }
+        });
+    }
+
+    await achievement.deleteOne();
+
+    return res.status(200).json(
+        new apiResponse(200, null, "Achievement deleted successfully")
+    );
+
+});

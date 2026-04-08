@@ -126,7 +126,7 @@ export const getMyDonations = asyncHandler(async (req, res) => {
 export const getAllDonations = asyncHandler(async (req, res) => {
 
     const donations = await Donation.find()
-        .populate("userId", "name email")
+        .populate("userId", "fullName email")
         .populate("campaignId", "title")
         .sort({ createdAt: -1 });
 

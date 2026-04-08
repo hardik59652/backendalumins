@@ -82,7 +82,7 @@ const getMyJobApplication=asyncHandler(async (req,res) => {
     const applications = await JobApplication.find({
         userId: req.user._id
     })
-    .populate("jobId", "title company location")
+    .populate("jobId", "title companyName location")
     .populate("userId","fullName email profileImage ")
 console.log(applications)
     if(!applications || applications.length === 0){

@@ -162,9 +162,115 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     );
   
   });
+  const updateUserProfile = asyncHandler(async (req, res) => {
+    const userId = req.user._id
+
+    const {
+        fullName,
+        phoneNumber,
+        graduationYear,
+        department,
+        currentCompany,
+        jobTitle,
+        location,
+        linkedinUrl
+    } = req.body
+
+    const updateData = {
+        fullName,
+        phoneNumber,
+        graduationYear,
+        department,
+        currentCompany,
+        jobTitle,
+        location,
+        linkedinUrl
+    }
+
+    // remove undefined fields
+    Object.keys(updateData).forEach(
+        (key) => updateData[key] === undefined && delete updateData[key]
+    )
+
+    // profile image update
+    if (req.files?.profileImage?.[0]?.path) {
+        updateData.profileImage = req.files.profileImage[0].path
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+            $set: updateData
+        },
+        { new: true }
+    ).select("-password -refreshToken")
+
+    if (!updatedUser) {
+        throw new apiError(404, "User not found")
+    }
+
+    return res.status(200).json(
+        new apiResponse(200, updatedUser, "Profile updated successfully")
+    )
+})
+ const changePassword = async (req, res) => {
+    try {
+      const userId = req.user._id;
+  
+      const { oldPassword, newPassword } = req.body;
+  
+      if (!oldPassword || !newPassword) {
+        return res.status(400).json({
+          message: "Old password and new password are required",
+        });
+      }
+  
+      const user = await User.findById(userId);
+  
+      const isMatch = await user.isPasswordCorrect(oldPassword);
+  
+      if (!isMatch) {
+        return res.status(401).json({
+          message: "Old password is incorrect",
+        });
+      }
+  
+      user.password = newPassword;
+      await user.save();
+  
+      res.status(200).json({
+        message: "Password changed successfully",
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Error changing password",
+        error: error.message,
+      });
+    }
+  };
+  const deleteAccount = async (req, res) => {
+    try {
+      const userId = req.user._id;
+  
+      await User.findByIdAndDelete(userId);
+  
+      res.status(200).json({
+        message: "Account deleted successfully"
+      });
+  
+    } catch (error) {
+      res.status(500).json({
+        message: "Error deleting account",
+        error: error.message
+      });
+    }
+  };
 export {
     registerUser,
     loginUser,
     logoutUser,
     getCurrentUser,
+    updateUserProfile,
+    changePassword,
+    deleteAccount,
 } 

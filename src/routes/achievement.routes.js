@@ -8,7 +8,10 @@ import {
     getApprovedAchievements,
     approveAchievement,
     rejectAchievement,
-    getPendingAchievements
+    getPendingAchievements,
+    getSingleAchievement,
+    updateAchievement,
+    deleteAchievement
 } from "../controllers/achievements.controllers.js"
 const router=express.Router()
 router.route("/create").post(
@@ -37,5 +40,19 @@ router.route("/pending").get(
 verifyJWT,
 verifyAdmin,
 getPendingAchievements
+)
+router.route("/update/:id").patch(
+    verifyJWT,
+    uploadAchievement.single("photo"),
+    updateAchievement
+)
+router.delete(
+    "/delete/:id",
+    verifyJWT,
+    deleteAchievement
+  );
+router.route("/:id").get(
+    verifyJWT,
+    getSingleAchievement
 )
 export default router
